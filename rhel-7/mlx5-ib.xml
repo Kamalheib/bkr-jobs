@@ -1,0 +1,97 @@
+<job retention_tag="scratch" group="rdma-users">
+	<whiteboard>MLX5 IB | RHEL-7 | RDMA sanity </whiteboard>
+	<recipeSet priority="Urgent">
+		<recipe whiteboard="1st machine" role="N1" ks_meta="harness=restraint-rhts" kernel_options="" kernel_options_post="">
+			<autopick random="false"/>
+			<watchdog panic="ignore"/>
+			<packages/>
+			<ks_appends>
+				<ks_append><![CDATA[
+					]]></ks_append>
+			</ks_appends>
+			<repos/>
+			<distroRequires>
+				<and>
+					<distro_family op="=" value="RedHatEnterpriseLinux7"/>
+					<distro_variant op="=" value="Server"/>
+					<distro_name op="=" value=""/>
+					<distro_arch op="=" value="x86_64"/>
+					<distro_tag op="=" value=""/>
+				</and>
+			</distroRequires>
+			<hostRequires>
+				<and>
+					<hostname op="=" value="rdma-dev-21.rdma.lab.eng.rdu2.redhat.com"/>
+					<system_type op="=" value="Machine"/>
+				</and>
+			</hostRequires>
+			<partitions>
+				<partition name="/mnt/rdma-ext4" size="25" type="part" fs="ext4"/>
+				<partition name="/mnt/rdma-xfs" size="25" type="part" fs="xfs"/>
+			</partitions>
+			<task name="/distribution/check-install" role="STANDALONE"/>
+			<task name="Boot test" role="STANDALONE">
+				<fetch url="https://gitlab.com/cki-project/kernel-tests/-/archive/main/kernel-tests-main.zip#distribution/kpkginstall"/>
+				<params>
+				<param name="CKI_NAME" value="Boot test"/>
+				<param name="CKI_UNIVERSAL_ID" value="boot"/>
+				<param name="KPKG_URL" value=""/>
+				<param name="KILLTIMEOVERRIDE" value="3600"/>
+				</params>
+			</task>
+			<task name="/kernel/infiniband/env_setup_dynamic" role="SERVERS">
+				<params>
+					<param name="ENV_DRIVER" value=""/>
+					<param name="ENV_NETWORK" value="ib0"/>
+				</params>
+			</task>
+			<task name="/kernel/infiniband/sanity" role="SERVERS"/>
+		</recipe>
+		<recipe whiteboard="2nd machine" role="N2" ks_meta="harness=restraint-rhts" kernel_options="" kernel_options_post="">
+			<autopick random="false"/>
+			<watchdog panic="ignore"/>
+			<packages/>
+			<ks_appends>
+				<ks_append><![CDATA[
+					]]></ks_append>
+			</ks_appends>
+			<repos/>
+			<distroRequires>
+				<and>
+					<distro_family op="=" value="RedHatEnterpriseLinux7"/>
+					<distro_variant op="=" value="Server"/>
+					<distro_name op="=" value=""/>
+					<distro_arch op="=" value="x86_64"/>
+					<distro_tag op="=" value=""/>
+				</and>
+			</distroRequires>
+			<hostRequires>
+				<and>
+					<hostname op="=" value="rdma-dev-22.rdma.lab.eng.rdu2.redhat.com"/>
+					<system_type op="=" value="Machine"/>
+				</and>
+			</hostRequires>
+			<partitions>
+				<partition name="/mnt/rdma-ext4" size="25" type="part" fs="ext4"/>
+				<partition name="/mnt/rdma-xfs" size="25" type="part" fs="xfs"/>
+			</partitions>
+			<task name="/distribution/check-install" role="STANDALONE"/>
+			<task name="Boot test" role="STANDALONE">
+				<fetch url="https://gitlab.com/cki-project/kernel-tests/-/archive/main/kernel-tests-main.zip#distribution/kpkginstall"/>
+				<params>
+				<param name="CKI_NAME" value="Boot test"/>
+				<param name="CKI_UNIVERSAL_ID" value="boot"/>
+				<param name="KPKG_URL" value=""/>
+				<param name="KILLTIMEOVERRIDE" value="3600"/>
+				</params>
+			</task>
+			<task name="/kernel/infiniband/env_setup_dynamic" role="CLIENTS">
+				<params>
+					<param name="ENV_DRIVER" value=""/>
+					<param name="ENV_NETWORK" value="ib0"/>
+				</params>
+			</task>
+			<task name="/kernel/infiniband/sanity" role="CLIENTS"/>
+		</recipe>
+	</recipeSet>
+</job>
